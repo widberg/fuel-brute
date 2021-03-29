@@ -9,9 +9,6 @@ typedef std::uint32_t crc32_t;
 __constant__ std::uint64_t HASHES_LEN;
 __constant__ crc32_t* HASHES;
 
-//#define EXTS_LEN (704U)
-//extern __constant__ const char* EXTS[EXTS_LEN];
-
 __constant__ std::uint64_t DICTIONARY_LEN;
 __constant__ const char** DICTIONARY;
 
@@ -140,7 +137,7 @@ std::uint32_t hostCRC32(const char* str, std::uint32_t value = 0)
 #define CHARS_LEN (40U)
 __constant__ char CHARS[CHARS_LEN + 1] = "-.0123456789>_abcdefghijklmnopqrstuvwxyz";
 
-#define MAX_DIRECTORIES (4U)
+#define MAX_DIRECTORIES (2U)
 
 struct trace_t
 {
@@ -150,9 +147,9 @@ struct trace_t
 __device__
 bool search(crc32_t hash)
 {
-    crc32_t low = 0;
-    crc32_t high = HASHES_LEN - 1;
-    crc32_t middle = low + ((high - low) / 2);  // prevents overflow related errors https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
+    std::uint64_t low = 0;
+    std::uint64_t high = HASHES_LEN - 1;
+    std::uint64_t middle = low + ((high - low) / 2);  // prevents overflow related errors https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
 
     do
     {
@@ -170,7 +167,7 @@ bool search(crc32_t hash)
         }
 
         middle = low + ((high - low) / 2);
-    } while (low < high);
+    } while (low < high && middle > 0);
 
     if (HASHES[low] == hash)
     {
@@ -200,16 +197,34 @@ void kernel(std::uint32_t offset, crc32_t hash, std::uint32_t depth, trace_t tra
         return;
     }
 
-    trace.data[depth] = id;
-
     hash = crc32(DICTIONARY[id], hash);
     if (search(hash))
     {
-        printf("%u = db:>%s>%s>%s>%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[trace.data[1]], DICTIONARY[trace.data[2]], DICTIONARY[trace.data[3]]);
+        switch (depth)
+        {
+        case 0:
+            printf("%u = db:>%s\n", hash, DICTIONARY[id]);
+            break;
+        case 1:
+            printf("%u = db:>%s>%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[id]);
+            break;
+        case 2:
+            printf("%u = db:>%s>%s>%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[trace.data[1]], DICTIONARY[id]);
+            break;
+        case 3:
+            printf("%u = db:>%s>%s>%s>%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[trace.data[1]], DICTIONARY[trace.data[2]], DICTIONARY[id]);
+            break;
+        case 4:
+            printf("%u = db:>%s>%s>%s>%s>%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[trace.data[1]], DICTIONARY[trace.data[2]], DICTIONARY[trace.data[3]], DICTIONARY[id]);
+            break;
+        default:
+            break;
+        }
     }
 
     if (depth < MAX_DIRECTORIES)
     {
+        trace.data[depth] = id;
         hash = (hash >> 8) ^ crc32_table[('>' ^ hash) & 0xff];
         for (std::uint32_t i = 0; i < ((DICTIONARY_LEN / BLOCK_MAX) / THREAD_MAX) + 1; ++i)
         {
@@ -280,9 +295,9 @@ int main()
     CUDA_ASSERT(cudaMemcpyToSymbol(HASHES, &deviceHashes, sizeof(deviceHashes)));
 
     const std::uint32_t INITIAL_CRC32 = hostCRC32("db:>");
+    trace_t trace = { 0 };
     for (std::uint32_t i = 0; i < ((size / BLOCK_MAX) / THREAD_MAX) + 1; ++i)
     {
-        trace_t trace = { 0 };
         kernel << <BLOCK_MAX, THREAD_MAX >> > (i * BLOCK_MAX * THREAD_MAX, INITIAL_CRC32, 0, trace);
     }
     CUDA_ASSERT(cudaPeekAtLastError());
