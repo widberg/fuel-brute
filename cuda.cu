@@ -137,11 +137,11 @@ std::uint32_t hostCRC32(const char* str, std::uint32_t value = 0)
 #define CHARS_LEN (40U)
 __constant__ char CHARS[CHARS_LEN + 1] = "-.0123456789>_abcdefghijklmnopqrstuvwxyz";
 
-#define MAX_DIRECTORIES (2U)
+#define MAX_DIRECTORIES (1U)
 
 struct trace_t
 {
-    std::uint32_t data[MAX_DIRECTORIES] = {};
+    std::uint32_t data[MAX_DIRECTORIES] = { 0 };
 };
 
 __device__
@@ -176,16 +176,6 @@ bool search(crc32_t hash)
 
     return false;
 }
-
-//__global__
-//void ext(crc32_t hash, trace_t trace)
-//{
-//    hash = crc32(EXTS[threadIdx.x], hash);
-//    if (search(hash))
-//    {
-//        printf("%u = db:>%s>%s>%s>%s.%s\n", hash, DICTIONARY[trace.data[0]], DICTIONARY[trace.data[1]], DICTIONARY[trace.data[2]], DICTIONARY[trace.data[3]], EXTS[threadIdx.x]);
-//    }
-//}
 
 __global__
 void kernel(std::uint32_t offset, crc32_t hash, std::uint32_t depth, trace_t trace)

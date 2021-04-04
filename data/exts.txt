@@ -1,0 +1,35 @@
+Anim_Z .TANIM
+Binary_Z .TBINARY
+Bitmap_Z .TIF .DDS .JPG .TGA
+//Camera_Z .TRTC_BF_CAMERA_Z_0 .TRTC_BF_CAMERA_Z_1 .TRTC_BF_CAMERA_Z_2 .TRTC_BF_CAMERA_Z_3 .TRTC_BF_CAMERA_Z_4
+CollisionVol_Z .TVOLUME
+Font_Z .TFONT
+GameObj_Z .TGAMEOBJ
+GenWorld_Z .TGENWORLD
+GwRoad_Z .TGWROAD
+//LightData_Z .TLIGHT_BF_LIGHTDATA_Z_0
+Lod_Z .TLOD
+//LodData_Z .TLOD_BF_LODDATA_Z_0
+//Material_Z
+MaterialAnim_Z .TBITMAP
+MaterialObj_Z .TOTEMBITMAP
+Mesh_Z _MESH.TMESH
+//MeshData_Z
+Node_Z .T3DNODE
+Omni_Z .TOMNI
+Particles_Z .TPARTICLES
+//ParticlesData_Z
+RotShape_Z .TROTSHAPE
+//RotShapeData_Z
+Rtc_Z .TRTC
+Skel_Z .TSKEL
+Skin_Z .TSKIN
+Sound_Z .WAV
+Spline_Z .TSPLINE
+SplineGraph_Z .TSPLINEGRAPH
+Surface_Z .TSURFACE
+//SurfaceDatas_Z .TSURFACE_BF_SURFACEDATA_Z_0
+//UserDefine_Z
+Warp_Z .TWARP
+World_Z .TWORLD
+WorldRef_Z .TWORLDREF
