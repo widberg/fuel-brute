@@ -5,6 +5,7 @@
 #include <vector>
 #include <thread>
 #include <bitset>
+#include <sstream>
 
 typedef std::uint32_t crc32_t;
 
@@ -12,7 +13,16 @@ std::uint32_t dictionarySize;
 std::uint32_t* lengths;
 std::uint32_t* dictionarySizes;
 crc32_t** dictionarys;
-std::uint8_t* hashData;
+
+#define COUT_MT_EX(s, x) \
+std::stringstream ss##x; \
+ss##x << s;            \
+std::cout << ss##x.str()
+
+#define COUT_MT(s)  \
+std::stringstream ss; \
+ss << s;            \
+std::cout << ss.str()
 
 std::bitset<0x100000000> hashes = {};
 
@@ -91,28 +101,7 @@ crc32_t crc32AppendZeros(crc32_t hash, std::uint8_t size)
     return hash;
 }
 
-__forceinline
-std::uint8_t getLookup(crc32_t hash)
-{
-    if (hash % 2)
-    {
-        return hashData[hash / 2] >> 4;
-    }
-    return hashData[hash / 2] & 0xF;
-}
-
-__forceinline
-void setLookup(crc32_t hash, std::uint8_t value)
-{
-    if (hash % 2)
-    {
-        hashData[hash / 2] = (value << 4) | (hashData[hash / 2] & 0xF);
-        return;
-    }
-    hashData[hash / 2] = (value & 0xF) | (hashData[hash / 2] & 0xF0);
-}
-
-#define MAX_DEPTH (1)
+#define MAX_DEPTH (0)
 
 crc32_t trace[MAX_DEPTH + 1] = {};
 
@@ -132,33 +121,25 @@ void search(crc32_t hash, std::uint8_t depth = 0)
             {
                 if (depth == 0)
                 {
-                    std::cout << "db:>" << trace[0] << " = " << temp << "\n";
+                    COUT_MT(temp << " " << trace[0] << "\n");
                 }
                 else
                 {
-                    std::cout << "db:>" << trace[0] << ">" << trace[1] << " = " << temp << "\n";
+                    COUT_MT(temp << " " << trace[0] << " " << trace[1] << "\n");
                 }
             }
 
             if (depth < MAX_DEPTH)
             {
                 temp = crc32Append(temp, '>');
-                if (getLookup(temp) <= depth)
-                {
-                    continue;
-                }
                 search(temp, depth + 1);
             }
         }
     }
-
-    setLookup(hash, std::min(getLookup(hash), depth));
 }
 
 void threadMain(crc32_t hash, std::uint32_t startI, std::uint32_t endI)
 {
-    std::cout << "Thread started: [" << startI << ", " << endI << ")\n";
-
     std::uint32_t lastLength = 0;
     for (std::uint32_t i = startI; i < endI; ++i)
     {
@@ -172,8 +153,6 @@ void threadMain(crc32_t hash, std::uint32_t startI, std::uint32_t endI)
             search(temp, 1);
         }
     }
-
-    std::cout << "Thread exited: [" << startI << ", " << endI << ")\n";
 }
 
 int main()
@@ -190,9 +169,6 @@ int main()
         std::vector<std::uint32_t> hashesVector;
         hashesVector.resize(hashesSize);
         hashesFile.read((char*)hashesVector.data(), hashesVector.size() * sizeof(crc32_t));
-
-        hashData = new std::uint8_t[0x80000000];
-        std::memset(hashData, 0xFF, 0x80000000);
 
         for (crc32_t hash : hashesVector)
         {
@@ -225,7 +201,7 @@ int main()
         dictionaryFile.close();
     }
 
-    crc32_t initial = crc32("db:>");
+    crc32_t initial = crc32("db:>textures>fxs>");
 
     search(initial);
 
@@ -259,7 +235,6 @@ int main()
     //    thread.join();
     //}
 
-    delete[] hashData;
     delete[] lengths;
     delete[] dictionarySizes;
 

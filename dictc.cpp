@@ -66,7 +66,9 @@ int main()
 	std::string line;
 	while (std::getline(in, line))
 	{
-		dictionary[line.length()].insert(crc32(line));
+        std::uint32_t hash = crc32(line);
+        std::cout << hash << " " << line << "\n";
+		dictionary[line.length()].insert(hash);
         ++words;
 	}
 
@@ -80,7 +82,7 @@ int main()
 
     for (auto it : dictionary)
     {
-        std::cout << std::to_string(it.first) << ": " << it.second.size() << "\n";
+        //std::cout << std::to_string(it.first) << ": " << it.second.size() << "\n";
         out.write((const char*)&it.first, sizeof(it.first));
         size = it.second.size();
         hashes += size;
@@ -93,7 +95,7 @@ int main()
 
 	out.close();
 
-    std::cout << "Words: " << words << "\nHashes: " << hashes << "\n";
+    //std::cout << "Words: " << words << "\nHashes: " << hashes << "\n";
 
 	return 0;
 }

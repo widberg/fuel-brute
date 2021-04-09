@@ -18,6 +18,11 @@ endif()
 
 project(fuelbrute VERSION 0.1.0.0 LANGUAGES CXX CUDA)
 
+add_executable(coagulate
+coagulate.cpp
+)
+set_target_properties(coagulate PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/data")
+
 add_executable(cpu
 cpu.cpp
 )
