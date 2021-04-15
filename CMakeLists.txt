@@ -18,6 +18,8 @@ endif()
 
 project(fuelbrute VERSION 0.1.0.0 LANGUAGES CXX CUDA)
 
+find_package(OpenCL REQUIRED)
+
 add_executable(coagulate
 coagulate.cpp
 )
@@ -32,6 +34,10 @@ add_executable(cuda
 cuda.cu
 )
 set_target_properties(cuda PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/data")
+
+add_executable(opencl opencl.cpp)
+target_link_libraries(opencl OpenCL::OpenCL)
+set_target_properties(opencl PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/data")
 
 target_compile_options(cuda PRIVATE -rdc=true --default-stream per-thread -G -g)
 target_link_libraries(cuda PRIVATE cudadevrt cudart)
