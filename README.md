@@ -5,9 +5,16 @@ CRC32 Brute Force Solver For FUEL
 
 ## Notice
 
-This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools.
+This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools. I have taken a break from working on this to investigate meta data available in FUEL's DPC archive format. Hopefully this investigation can help uncover hits about the directory structure and lead to a "strength in numbers" solution.
 
 ## Files
+
+The general flow of running the system is:
+
+1. Generate your dictionary and hash files
+2. Run either cpu or cuda
+3. Coagulate the result
+4. Hand verify the target string collisions
 
 ### dictc
 
@@ -32,3 +39,12 @@ Cpu middle end.
 ### cuda
 
 Cuda middle end.
+
+## Optimizations
+
+Optimizations used in the system:
+
+* Prefix addition
+* Suffix subtraction
+* Dictionary
+* Table driven
