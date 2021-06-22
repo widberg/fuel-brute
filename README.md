@@ -1,5 +1,5 @@
 # fuel-brute
-CRC32 Brute Force Solver For FUEL
+CRC32 Brute Force Solver For Asobo Studio's FUEL (2009)
 
 <sup>This repository is a relative of the main [FMTK repository](https://github.com/widberg/fmtk).</sup>
 
