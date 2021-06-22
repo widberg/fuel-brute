@@ -5,7 +5,9 @@ CRC32 Brute Force Solver For FUEL
 
 ## Notice
 
-This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools. I have taken a break from working on this to investigate meta data available in FUEL's DPC archive format. Hopefully this investigation can help uncover hits about the directory structure and lead to a "strength in numbers" solution.
+This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools. I have taken a break from working on this to investigate meta data available in FUEL's DPC archive format. Hopefully this investigation can help uncover hints about the directory structure and lead to a "strength in numbers" solution.
+
+Calculating a crc32 collision from a target hash is trivial; calculating the original target string used to generate the target hash with only the target hash is impossible. For this project to be useful to you, you will need to divise a system of scoring your confidence in the potential target strings. Gather as much context as possible and minimize the possibility space. Smaller dictionary is better. Fewer wildcards in the pattern is better. The prefix and suffix are free irregardless of length. Best of luck.
 
 ## Files
 
