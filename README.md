@@ -48,3 +48,27 @@ Optimizations used in the system:
 * Suffix subtraction
 * Dictionary
 * Table driven
+
+## Getting Started
+
+### Prerequisites
+
+* CMake
+* Cuda
+* OpenCL
+
+### Checkout
+
+```sh
+git clone https://github.com/widberg/fuel-brute.git
+cd fuel-brute
+```
+
+### Build
+
+```sh
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
