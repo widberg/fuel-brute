@@ -5,11 +5,11 @@ CRC32 Brute Force Solver For FUEL
 
 ## Notice
 
-This project is aimed at crc32 hashes of file paths; if your hashes are of anything else, then I can't promise you'll find this project useful.
+This project is aimed at crc32 hashes of file paths; if your hashes are of anything else, then I can't promise you'll find this project useful. Check out Hashcat and John the Ripper for cool general purpose hash cracking tools that blow this project out of the water in most cases.
 
 This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools. I have taken a break from working on this to investigate meta data available in FUEL's DPC archive format. Hopefully this investigation can help uncover hints about the directory structure and lead to a "strength in numbers" solution.
 
-Calculating a crc32 collision from a target hash is trivial; calculating the original target string used to generate the target hash with only the target hash is impossible. For this project to be useful to you, you will need to divise a system of scoring your confidence in the potential target strings. Gather as much context as possible and minimize the possibility space. Smaller dictionary is better. Fewer wildcards in the pattern is better. The prefix and suffix are free irregardless of length. Best of luck.
+Calculating a crc32 collision from a target hash is trivial; calculating the original target string used to generate the target hash with only the target hash is impossible. For this project to be useful to you, you will need to divise a system of scoring your confidence in the potential target strings. Gather as much context as possible and minimize the possibility space. Smaller dictionary is better. Fewer wildcards in the pattern is better. The prefix and suffix are free regardless of length. Best of luck!
 
 ## Files
 
