@@ -5,7 +5,7 @@ CRC32 Brute Force Solver For Asobo Studio's FUEL (2009)
 
 ## Notice
 
-This project is aimed at crc32 hashes of file paths; if your hashes are of anything else, then I can't promise you'll find this project useful. Check out Hashcat and John the Ripper for cool general purpose hash cracking tools that blow this project out of the water in most cases.
+This project is aimed at crc32 hashes of long, ~256 chars, file paths; if your hashes are of anything else, then I can't promise you'll find this project useful. Check out Hashcat and John the Ripper for cool general purpose hash cracking tools that blow this project out of the water.
 
 This project is a reverse engineering playground for crc32 algorithms more than it is a set of tools. I have taken a break from working on this to investigate meta data available in FUEL's DPC archive format. Hopefully this investigation can help uncover hints about the directory structure and lead to a "strength in numbers" solution.
 
